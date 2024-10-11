@@ -11,12 +11,13 @@ import java.io.InputStream
 import java.io.OutputStream
 import kotlin.coroutines.coroutineContext
 
-class TaskDatabaseHelper(val context: Context) : SQLiteOpenHelper(context, "BTbuoi4.db", null, 1) {
+class TaskDatabaseHelper(private val context: Context) : SQLiteOpenHelper(context, "BTbuoi4.db", null, 1) {
 
     private val dbPath: String = context.getDatabasePath("BTbuoi4.db").path
 
     override fun onCreate(db: SQLiteDatabase) {
         // Bảng đã có trong cơ sở dữ liệu từ assets
+        db.execSQL("CREATE TABLE IF NOT EXISTS tasks (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, description TEXT)")
     }
 
     override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
@@ -66,7 +67,15 @@ class TaskDatabaseHelper(val context: Context) : SQLiteOpenHelper(context, "BTbu
         db.insert("tasks", null, values)
         db.close()
     }
-
+    fun coutColumn(): Int {
+        val db = this.readableDatabase
+        val cursor: Cursor = db.rawQuery("SELECT COUNT(*) FROM tasks", null)
+        cursor.moveToFirst()
+        val count = cursor.getInt(0)
+        cursor.close()
+        db.close()
+        return count
+    }
     fun getAllTasks(): List<Task> {
         val taskList = mutableListOf<Task>()
         val db = this.readableDatabase
