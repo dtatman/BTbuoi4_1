@@ -110,4 +110,9 @@ class TaskDatabaseHelper(private val context: Context) : SQLiteOpenHelper(contex
         db.delete("tasks", "id = ?", arrayOf(taskId.toString()))
         db.close()
     }
+    fun deleteData(){
+        val db = this.writableDatabase
+        db.delete("tasks",null,null)
+        db.close()
+    }
 }

@@ -15,14 +15,17 @@ class MainActivity : AppCompatActivity() {
     private lateinit var listView: ListView
     private lateinit var but:Button
     private lateinit var butd:Button
+    private lateinit var butcls:Button
     private val taskList = ArrayList<Task>()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         but = findViewById(R.id.button)
         butd=findViewById(R.id.butDel)
+        butcls=findViewById(R.id.butClearData)
         butAdd(but)
         butDel(butd)
+        butCLRData(butcls)
         listView = findViewById(R.id.listView)
         dbHelper = TaskDatabaseHelper(this)
 
@@ -43,6 +46,11 @@ class MainActivity : AppCompatActivity() {
             loadTasks()
         }
     }
+    private fun clsEtext(){
+        findViewById<EditText>(R.id.editTextid).text.clear()
+        findViewById<EditText>(R.id.editTextname).text.clear()
+        findViewById<EditText>(R.id.editTextDescription).text.clear()
+    }
     private fun butDel(but:Button){
         but.setOnClickListener(){
             var id=findViewById<EditText>(R.id.editTextid).text.toString().toInt()
@@ -50,7 +58,14 @@ class MainActivity : AppCompatActivity() {
             loadTasks()
         }
     }
+    private fun butCLRData(but:Button){
+        but.setOnClickListener(){
+            dbHelper.deleteData()
+            loadTasks()
+        }
+    }
     private fun loadTasks() {
+        clsEtext()
         taskList.clear()
         taskList.addAll(dbHelper.getAllTasks())
 
