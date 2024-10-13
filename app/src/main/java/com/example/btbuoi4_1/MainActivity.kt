@@ -6,8 +6,10 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.LinearLayout
 import android.widget.ListView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import java.io.IOException
+import kotlin.system.exitProcess
 
 class MainActivity : AppCompatActivity() {
 
@@ -39,11 +41,17 @@ class MainActivity : AppCompatActivity() {
     }
     private fun butAdd(but:Button){
         but.setOnClickListener(){
+            val id=findViewById<EditText>(R.id.editTextid).text.toString()
             val nam=findViewById<EditText>(R.id.editTextname).text.toString()
             val desc=findViewById<EditText>(R.id.editTextDescription).text.toString()
             val task=Task(dbHelper.coutColumn()+1,nam,desc)
-            dbHelper.addTask(task)
-            loadTasks()
+            if (id.isNotEmpty()){
+                Toast.makeText(this,"Xin vui lòng xóa id trước ",Toast.LENGTH_LONG).show()
+            }
+            else    {
+                dbHelper.addTask(task)
+                loadTasks()
+            }
         }
     }
     private fun clsEtext(){
